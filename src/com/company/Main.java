@@ -29,40 +29,40 @@ public class Main {
         float[] arr = new float[SIZE];
         Arrays.fill(arr, 1);
         long a = System.currentTimeMillis();
-        float[] a1 = new float[HALF];
-        float[] a2 = new float[HALF];
-        System.arraycopy(arr, 0, a1, 0, HALF);
-        System.arraycopy(arr, HALF, a2, 0, HALF);
+        float[] firstHalfArray = new float[HALF];
+        float[] secondHalfArray = new float[HALF];
+        System.arraycopy(arr, 0, firstHalfArray, 0, HALF);
+        System.arraycopy(arr, HALF, secondHalfArray, 0, HALF);
 
-        Thread Thread_A1 = new Thread(() -> {
-            for (int i = 0; i < a1.length; i++) {
-                a1[i] = a1[i] = (float) (a1[i] * Math.sin(0.2f + i / 5.0) *
+        Thread firstThread = new Thread(() -> {
+            for (int i = 0; i < firstHalfArray.length; i++) {
+                firstHalfArray[i] = firstHalfArray[i] = (float) (firstHalfArray[i] * Math.sin(0.2f + i / 5.0) *
                         Math.cos(0.2f + i / 5.0) * Math.cos(0.4f + i / 2.0));
             }
         });
 
 
 
-       Thread Thread_A2 =  new Thread(() -> {
-            for (int i = 0, j = HALF; i < a2.length; i++, j++) {
-                a2[i] = a2[i] = (float) (a2[i] * Math.sin(0.2f + j/ 5.0) *
+       Thread secondThread =  new Thread(() -> {
+            for (int i = 0, j = HALF; i < secondHalfArray.length; i++, j++) {
+                secondHalfArray[i] = secondHalfArray[i] = (float) (secondHalfArray[i] * Math.sin(0.2f + j/ 5.0) *
                         Math.cos(0.2f + j / 5.0) * Math.cos(0.4f + j / 2.0));
             }
         });
 
-       Thread_A1.start();
-       Thread_A2.start();
+       firstThread.start();
+       secondThread.start();
 
         try {
-            Thread_A1.join();
-            Thread_A2.join();
+            firstThread.join();
+            secondThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
 
-        System.arraycopy(a1, 0, arr, 0, HALF);
-        System.arraycopy(a2, 0, arr, HALF, HALF);
+        System.arraycopy(firstHalfArray, 0, arr, 0, HALF);
+        System.arraycopy(secondHalfArray, 0, arr, HALF, HALF);
         System.out.println(System.currentTimeMillis() - a);
     }
 
